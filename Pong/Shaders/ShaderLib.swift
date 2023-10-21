@@ -2,7 +2,7 @@
 //  ShaderLib.swift
 //  Pong
 //
-//  Created by Luka Erkapic on 15.10.23.
+//  Created by Luka Erkapic on 20.10.23.
 //
 
 import Foundation
@@ -14,7 +14,7 @@ class ShaderLib
     public var vertexFunction: MTLFunction? = nil
     public var fragmentFunction: MTLFunction? = nil
     
-    init(_ device: MTLDevice, _ vertexFnName: String, _ fragmentFnName: String)
+    init(_ device: MTLDevice, _ vertexFnName: String, _ fragmentFnName: String )
     {
         library = device.makeDefaultLibrary()!
         

@@ -10,10 +10,15 @@ import MetalKit
 
 class UnlitRenderPipeline
 {
-    let renderPipelineState: MTLRenderPipelineState
+    let device: MTLDevice
+    var renderPipelineState: MTLRenderPipelineState? = nil
     
     init(_ device: MTLDevice)
     {
+        self.device = device
+    }
+    
+    func initialize(){
         let shaderLibrary = ShaderLib(device, "unlitMaterialVS", "unlitMaterialFS")
         
         let renderDescriptor = MTLRenderPipelineDescriptor()
@@ -32,7 +37,7 @@ class UnlitRenderPipeline
         _ renderEncoder: MTLRenderCommandEncoder
     )
     {
-        renderEncoder.setRenderPipelineState(renderPipelineState)
+        renderEncoder.setRenderPipelineState(renderPipelineState!)
         
         renderEncoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: 3)
     }

@@ -13,7 +13,6 @@
 		C6F550AA2ADBBAFF005B8C47 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C6F550A92ADBBAFF005B8C47 /* Preview Assets.xcassets */; };
 		C6F550B22ADBBB57005B8C47 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6F550B12ADBBB57005B8C47 /* Coordinator.swift */; };
 		C6F550B42ADBBC4A005B8C47 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6F550B32ADBBC4A005B8C47 /* Constants.swift */; };
-		C6F550B62ADBBE7A005B8C47 /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6F550B52ADBBE7A005B8C47 /* Renderer.swift */; };
 		C6F550BD2ADBC52B005B8C47 /* UnlitRenderPipeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6F550BC2ADBC52B005B8C47 /* UnlitRenderPipeline.swift */; };
 		C6F550C02ADBC575005B8C47 /* UnlitMaterialShader.metal in Sources */ = {isa = PBXBuildFile; fileRef = C6F550BF2ADBC575005B8C47 /* UnlitMaterialShader.metal */; };
 		C6F550C22ADBC687005B8C47 /* ShaderLib.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6F550C12ADBC687005B8C47 /* ShaderLib.swift */; };
@@ -28,7 +27,6 @@
 		C6F550AB2ADBBAFF005B8C47 /* Pong.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Pong.entitlements; sourceTree = "<group>"; };
 		C6F550B12ADBBB57005B8C47 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		C6F550B32ADBBC4A005B8C47 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
-		C6F550B52ADBBE7A005B8C47 /* Renderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Renderer.swift; sourceTree = "<group>"; };
 		C6F550BC2ADBC52B005B8C47 /* UnlitRenderPipeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnlitRenderPipeline.swift; sourceTree = "<group>"; };
 		C6F550BF2ADBC575005B8C47 /* UnlitMaterialShader.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = UnlitMaterialShader.metal; sourceTree = "<group>"; };
 		C6F550C12ADBC687005B8C47 /* ShaderLib.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShaderLib.swift; sourceTree = "<group>"; };
@@ -67,7 +65,6 @@
 				C6F550BE2ADBC560005B8C47 /* Shaders */,
 				C6F550BB2ADBC51E005B8C47 /* RenderPipelines */,
 				C6F550B82ADBC4DA005B8C47 /* Constants */,
-				C6F550B72ADBC4C4005B8C47 /* Renderer */,
 				C6F550A22ADBBAFF005B8C47 /* PongApp.swift */,
 				C6F550A42ADBBAFF005B8C47 /* ContentView.swift */,
 				C6F550A62ADBBAFF005B8C47 /* Assets.xcassets */,
@@ -84,14 +81,6 @@
 				C6F550A92ADBBAFF005B8C47 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
-			sourceTree = "<group>";
-		};
-		C6F550B72ADBC4C4005B8C47 /* Renderer */ = {
-			isa = PBXGroup;
-			children = (
-				C6F550B52ADBBE7A005B8C47 /* Renderer.swift */,
-			);
-			path = Renderer;
 			sourceTree = "<group>";
 		};
 		C6F550B82ADBC4DA005B8C47 /* Constants */ = {
@@ -194,7 +183,6 @@
 				C6F550B22ADBBB57005B8C47 /* Coordinator.swift in Sources */,
 				C6F550BD2ADBC52B005B8C47 /* UnlitRenderPipeline.swift in Sources */,
 				C6F550A32ADBBAFF005B8C47 /* PongApp.swift in Sources */,
-				C6F550B62ADBBE7A005B8C47 /* Renderer.swift in Sources */,
 				C6F550B42ADBBC4A005B8C47 /* Constants.swift in Sources */,
 				C6F550C02ADBC575005B8C47 /* UnlitMaterialShader.metal in Sources */,
 			);

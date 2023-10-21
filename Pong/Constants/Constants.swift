@@ -2,7 +2,7 @@
 //  Constants.swift
 //  Pong
 //
-//  Created by Luka Erkapic on 15.10.23.
+//  Created by Luka Erkapic on 20.10.23.
 //
 
 import Foundation
