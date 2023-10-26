@@ -14,28 +14,21 @@ class Coordinator : NSObject, MTKViewDelegate {
     
     var device: MTLDevice? = nil
     
-    var renderPipelineState: MTLRenderPipelineState? = nil
+    var unlitPipeline : UnlitRenderPipeline? = nil
+    
+    var geometryBuffer: GeometryBuffers? = nil
     
     
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
-
+        
         if !initialized {
             self.device = view.device!
             
-            let shaderLibrary = ShaderLib(device!, "unlitMaterialVS", "unlitMaterialFS")
+            unlitPipeline = UnlitRenderPipeline(device!)
             
-            let renderDescriptor = MTLRenderPipelineDescriptor()
-            renderDescriptor.label = "Unlit Render Pipeline"
-            renderDescriptor.vertexFunction = shaderLibrary.vertexFunction!
-            renderDescriptor.fragmentFunction = shaderLibrary.fragmentFunction!
-            renderDescriptor.colorAttachments[0].pixelFormat = .bgra8Unorm
+            let geometry = GeometryBuilder().createQuadGeometry()
+            geometryBuffer = GeometryBuffers(device!, geometry)
             
-            guard let renderPipelineState = try?
-                    device!.makeRenderPipelineState(descriptor: renderDescriptor) else {
-                fatalError("Could not create Unlit Render Pipeline")
-            }
-            
-            self.renderPipelineState = renderPipelineState
         }
     }
     
@@ -55,19 +48,17 @@ class Coordinator : NSObject, MTKViewDelegate {
         colorAttachment0.texture = view.currentDrawable?.texture
         colorAttachment0.loadAction = .clear
         colorAttachment0.storeAction = .store
-        colorAttachment0.clearColor = MTLClearColorMake(1, 0,0, 1)
+        colorAttachment0.clearColor = MTLClearColorMake(0.8, 0.8,0.8, 1)
         
         let renderPassEncoder = commandBuffer?.makeRenderCommandEncoder(descriptor: renderPassDescriptor)
         
         // DRAW HERE
-        renderPassEncoder?.setRenderPipelineState(renderPipelineState!)
-        renderPassEncoder?.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: 3)
+        unlitPipeline?.draw(renderPassEncoder!, geometryBuffer!)
         
         
         renderPassEncoder?.endEncoding()
         commandBuffer?.present(view.currentDrawable!)
         commandBuffer?.commit()
-        
         
     }
     
