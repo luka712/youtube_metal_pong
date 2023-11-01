@@ -27,12 +27,24 @@ class GeometryBuilder
         
         let colors : [Float] = [
         
-            1, 0,0, 1,
-            0, 1,0,1,
-            0,0,1,1,
-            1,1,0,1
+            1, 1,1, 1,
+            1, 1,1,1,
+            1,1,1,1,
+            1,1,1,1
         ]
         
-        return Geometry(positionVertices: positions, indices: indices, colors: colors)
+        let texCoords: [Float] = [
+            0,1,
+            0,0,
+            1,1,
+            1,0
+        ]
+        
+        return Geometry(
+            positionVertices: positions,
+            indices: indices,
+            colors: colors,
+            texCoords: texCoords
+        )
     }
 }

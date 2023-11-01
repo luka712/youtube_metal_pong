@@ -11,6 +11,7 @@ import MetalKit
 class UnlitRenderPipeline
 {
     var renderPipelineState: MTLRenderPipelineState? = nil
+    let emptyTexture: Texture2D
 
     
     init(_ device: MTLDevice)
@@ -29,13 +30,24 @@ class UnlitRenderPipeline
         }
         
         self.renderPipelineState = renderPipelineState
+        emptyTexture = Texture2D.makeEmpty(device)
     }
     
-    func draw(_ renderEncoder: MTLRenderCommandEncoder, _ buffers: GeometryBuffers)
+    func draw(_ renderEncoder: MTLRenderCommandEncoder, _ buffers: GeometryBuffers, _ diffuseTexture: Texture2D? = nil)
     {
         renderEncoder.setRenderPipelineState(renderPipelineState!)
         renderEncoder.setVertexBuffer(buffers.positionsBuffer, offset: 0, index: 0)
         renderEncoder.setVertexBuffer(buffers.colorBuffer, offset: 0, index: 1)
+        renderEncoder.setVertexBuffer(buffers.texCoordsBuffer, offset: 0, index: 2)
+        
+        if diffuseTexture != nil {
+            renderEncoder.setFragmentTexture(diffuseTexture!.texture, index: 0)
+            renderEncoder.setFragmentSamplerState(diffuseTexture!.samplerState, index: 0)
+        }
+        else {
+            renderEncoder.setFragmentTexture(emptyTexture.texture, index: 0)
+            renderEncoder.setFragmentSamplerState(emptyTexture.samplerState, index: 0)
+        }
         
         if buffers.usesIndices {
             renderEncoder.drawIndexedPrimitives(
