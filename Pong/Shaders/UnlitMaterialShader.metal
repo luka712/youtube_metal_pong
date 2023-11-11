@@ -1,4 +1,3 @@
-
 #include <metal_stdlib>
 using namespace metal;
 
@@ -16,6 +15,9 @@ vertex VSOutput unlitMaterialVS(
                                 const device packed_float4 *colors [[buffer(1)]],
                                 const device packed_float2 *texCoords [[buffer(2)]],
                                 
+                                // constant buffer
+                                constant packed_float2 &textureTilling [[buffer(3)]],
+                                
                                 // builtins
                                 uint vid [[vertex_id]])
 {
@@ -24,16 +26,20 @@ vertex VSOutput unlitMaterialVS(
     VSOutput out;
     out.position = float4(positions[vid], 1.0);
     out.color = colors[vid];
-    out.texCoords = texCoords[vid];
+    out.texCoords = texCoords[vid] * textureTilling;
     return out;
 }
 
 
 
 fragment float4 unlitMaterialFS(VSOutput in [[stage_in]],
+                                
+                                // constant buffers
+                                constant packed_float4 &diffuseColor [[buffer(0)]],
+                                
                                 texture2d<float> diffuseTexture [[texture(0)]],
                                 sampler texSampler [[sampler(0)]]
                                 )
 {
-    return in.color * diffuseTexture.sample(texSampler, in.texCoords);
+    return in.color * diffuseColor * diffuseTexture.sample(texSampler, in.texCoords);
 }

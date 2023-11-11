@@ -18,8 +18,6 @@ class Coordinator : NSObject, MTKViewDelegate {
     
     var geometryBuffer: GeometryBuffers? = nil
     
-    var testTexture: Texture2D? = nil
-    
     
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
         
@@ -32,7 +30,7 @@ class Coordinator : NSObject, MTKViewDelegate {
             geometryBuffer = GeometryBuffers(device!, geometry)
             
             let image = NSImage(named: "test_texture")
-            testTexture = Texture2D(device!, image!)
+            unlitPipeline?.diffuseTexture = Texture2D(device!, image!)
         }
     }
     
@@ -57,7 +55,7 @@ class Coordinator : NSObject, MTKViewDelegate {
         let renderPassEncoder = commandBuffer?.makeRenderCommandEncoder(descriptor: renderPassDescriptor)
         
         // DRAW HERE
-        unlitPipeline?.draw(renderPassEncoder!, geometryBuffer!, testTexture!)
+        unlitPipeline?.draw(renderPassEncoder!, geometryBuffer!)
         
         
         renderPassEncoder?.endEncoding()

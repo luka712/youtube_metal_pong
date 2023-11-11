@@ -26,6 +26,8 @@ class Texture2D
         let samplerDescriptor = MTLSamplerDescriptor()
         samplerDescriptor.minFilter = .linear
         samplerDescriptor.magFilter = .linear
+        samplerDescriptor.sAddressMode = .repeat
+        samplerDescriptor.tAddressMode = .repeat
         samplerState = device.makeSamplerState(descriptor: samplerDescriptor)!
     }
     
@@ -43,3 +45,4 @@ class Texture2D
         
     }
 }
+
