@@ -36,11 +36,16 @@ class UnlitRenderPipeline
         }
     }
     
+    private var _transform = Matrix.identity()
+    private var transformBuffer: ConstantBuffer<simd_float4x4>
     
-    public var transform = Matrix.identity()
-    private let transformBuffer: ConstantBuffer<simd_float4x4>
-
-
+    var transform: simd_float4x4 {
+        get { return _transform}
+        set {
+            _transform = newValue
+            transformBuffer.write(data: &_transform)
+        }
+    }
     
     init(_ device: MTLDevice)
     {
@@ -66,12 +71,12 @@ class UnlitRenderPipeline
         
         textureTilling = simd_float2(5,5)
         diffuseColor = simd_float4(1,1,1,1)
+        transform = Matrix.identity()
     }
+    
     
     func draw(_ renderEncoder: MTLRenderCommandEncoder, _ buffers: GeometryBuffers)
     {
-        transformBuffer.write(data: &transform)
-        
         renderEncoder.setRenderPipelineState(renderPipelineState!)
         renderEncoder.setVertexBuffer(buffers.positionsBuffer, offset: 0, index: 0)
         renderEncoder.setVertexBuffer(buffers.colorBuffer, offset: 0, index: 1)

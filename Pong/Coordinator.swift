@@ -18,7 +18,8 @@ class Coordinator : NSObject, MTKViewDelegate {
     
     var geometryBuffer: GeometryBuffers? = nil
     
-    var angle: Float = 0.0
+    var angle : Float = 0
+    
     
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
         
@@ -56,9 +57,8 @@ class Coordinator : NSObject, MTKViewDelegate {
         let renderPassEncoder = commandBuffer?.makeRenderCommandEncoder(descriptor: renderPassDescriptor)
         
         // DRAW HERE
-        unlitPipeline?.transform = Matrix.translate(angle, 0, 0) * Matrix.rotateZ(angle)
-        angle += 0.001
-        unlitPipeline?.transform = Matrix.identity()
+        unlitPipeline?.transform = Matrix.translate(1,0,0) *  Matrix.rotationZ(angle)
+        angle += 0.01
         unlitPipeline?.draw(renderPassEncoder!, geometryBuffer!)
         
         
