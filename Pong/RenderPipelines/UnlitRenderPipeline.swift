@@ -36,6 +36,12 @@ class UnlitRenderPipeline
         }
     }
     
+    
+    public var transform = Matrix.identity()
+    private let transformBuffer: ConstantBuffer<simd_float4x4>
+
+
+    
     init(_ device: MTLDevice)
     {
         let shaderLibrary = ShaderLib(device, "unlitMaterialVS", "unlitMaterialFS")
@@ -56,6 +62,7 @@ class UnlitRenderPipeline
         
         textureTillingBuffer = ConstantBuffer(device)
         diffuseColorBuffer = ConstantBuffer(device)
+        transformBuffer = ConstantBuffer(device)
         
         textureTilling = simd_float2(5,5)
         diffuseColor = simd_float4(1,1,1,1)
@@ -63,11 +70,14 @@ class UnlitRenderPipeline
     
     func draw(_ renderEncoder: MTLRenderCommandEncoder, _ buffers: GeometryBuffers)
     {
+        transformBuffer.write(data: &transform)
+        
         renderEncoder.setRenderPipelineState(renderPipelineState!)
         renderEncoder.setVertexBuffer(buffers.positionsBuffer, offset: 0, index: 0)
         renderEncoder.setVertexBuffer(buffers.colorBuffer, offset: 0, index: 1)
         renderEncoder.setVertexBuffer(buffers.texCoordsBuffer, offset: 0, index: 2)
-        renderEncoder.setVertexBuffer(textureTillingBuffer.buffer, offset: 0, index: 3)
+        renderEncoder.setVertexBuffer(transformBuffer.buffer, offset: 0, index: 3)
+        renderEncoder.setVertexBuffer(textureTillingBuffer.buffer, offset: 0, index: 4)
         
         renderEncoder.setFragmentBuffer(diffuseColorBuffer.buffer, offset: 0, index: 0)
         renderEncoder.setFragmentTexture(diffuseTexture.texture, index: 0)

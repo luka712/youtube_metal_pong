@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C6446DFB2B0E75A100A5827B /* Matrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6446DFA2B0E75A100A5827B /* Matrix.swift */; };
 		C65608232AFABC83006279BD /* ConstantBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C65608222AFABC83006279BD /* ConstantBuffer.swift */; };
 		C658290A2AE70DD30072706C /* GeometryBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = C65829092AE70DD30072706C /* GeometryBuilder.swift */; };
 		C658290C2AE70DE80072706C /* Geometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = C658290B2AE70DE80072706C /* Geometry.swift */; };
@@ -24,6 +25,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C6446DFA2B0E75A100A5827B /* Matrix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Matrix.swift; sourceTree = "<group>"; };
 		C65608222AFABC83006279BD /* ConstantBuffer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConstantBuffer.swift; sourceTree = "<group>"; };
 		C65829092AE70DD30072706C /* GeometryBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeometryBuilder.swift; sourceTree = "<group>"; };
 		C658290B2AE70DE80072706C /* Geometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Geometry.swift; sourceTree = "<group>"; };
@@ -53,6 +55,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C6446DF92B0E759600A5827B /* Math */ = {
+			isa = PBXGroup;
+			children = (
+				C6446DFA2B0E75A100A5827B /* Matrix.swift */,
+			);
+			path = Math;
+			sourceTree = "<group>";
+		};
 		C65608212AFABC75006279BD /* ConstantBuffers */ = {
 			isa = PBXGroup;
 			children = (
@@ -105,6 +115,7 @@
 		C6F550A12ADBBAFF005B8C47 /* Pong */ = {
 			isa = PBXGroup;
 			children = (
+				C6446DF92B0E759600A5827B /* Math */,
 				C65608212AFABC75006279BD /* ConstantBuffers */,
 				C6A2A3A82AF227D200A6FF16 /* Texture */,
 				C658290D2AE70F510072706C /* AttributeBuffers */,
@@ -228,6 +239,7 @@
 				C6F550C22ADBC687005B8C47 /* ShaderLib.swift in Sources */,
 				C6F550A52ADBBAFF005B8C47 /* ContentView.swift in Sources */,
 				C6F550B22ADBBB57005B8C47 /* Coordinator.swift in Sources */,
+				C6446DFB2B0E75A100A5827B /* Matrix.swift in Sources */,
 				C65608232AFABC83006279BD /* ConstantBuffer.swift in Sources */,
 				C658290F2AE70F790072706C /* GeometryBuffers.swift in Sources */,
 				C658290A2AE70DD30072706C /* GeometryBuilder.swift in Sources */,
