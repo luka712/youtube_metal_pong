@@ -17,6 +17,7 @@ class Coordinator : NSObject, MTKViewDelegate {
     var unlitPipeline : UnlitRenderPipeline? = nil
     
     var geometryBuffer: GeometryBuffers? = nil
+    var projectionViewBuffer: ConstantBuffer<simd_float4x4>? = nil
     
     var angle : Float = 0
     
@@ -33,6 +34,10 @@ class Coordinator : NSObject, MTKViewDelegate {
             
             let image = NSImage(named: "test_texture")
             unlitPipeline?.diffuseTexture = Texture2D(device!, image!)
+            
+            projectionViewBuffer = ConstantBuffer<simd_float4x4>(device!)
+            var projectionView = Matrix.ortographic(-5, 5, -5, 5, 0, 5)
+            projectionViewBuffer?.write(data: &projectionView)
         }
     }
     
@@ -57,9 +62,9 @@ class Coordinator : NSObject, MTKViewDelegate {
         let renderPassEncoder = commandBuffer?.makeRenderCommandEncoder(descriptor: renderPassDescriptor)
         
         // DRAW HERE
-        unlitPipeline?.transform = Matrix.translate(1,0,0) *  Matrix.rotationZ(angle)
+        unlitPipeline?.transform = Matrix.rotationZ(angle)
         angle += 0.01
-        unlitPipeline?.draw(renderPassEncoder!, geometryBuffer!)
+        unlitPipeline?.draw(renderPassEncoder!, geometryBuffer!, projectionViewBuffer!)
         
         
         renderPassEncoder?.endEncoding()

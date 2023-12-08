@@ -69,13 +69,13 @@ class UnlitRenderPipeline
         diffuseColorBuffer = ConstantBuffer(device)
         transformBuffer = ConstantBuffer(device)
         
-        textureTilling = simd_float2(5,5)
+        textureTilling = simd_float2(1, 1)
         diffuseColor = simd_float4(1,1,1,1)
         transform = Matrix.identity()
     }
     
     
-    func draw(_ renderEncoder: MTLRenderCommandEncoder, _ buffers: GeometryBuffers)
+    func draw(_ renderEncoder: MTLRenderCommandEncoder, _ buffers: GeometryBuffers, _ projectionView: ConstantBuffer<simd_float4x4>)
     {
         renderEncoder.setRenderPipelineState(renderPipelineState!)
         renderEncoder.setVertexBuffer(buffers.positionsBuffer, offset: 0, index: 0)
@@ -83,6 +83,7 @@ class UnlitRenderPipeline
         renderEncoder.setVertexBuffer(buffers.texCoordsBuffer, offset: 0, index: 2)
         renderEncoder.setVertexBuffer(transformBuffer.buffer, offset: 0, index: 3)
         renderEncoder.setVertexBuffer(textureTillingBuffer.buffer, offset: 0, index: 4)
+        renderEncoder.setVertexBuffer(projectionView.buffer, offset: 0, index: 5)
         
         renderEncoder.setFragmentBuffer(diffuseColorBuffer.buffer, offset: 0, index: 0)
         renderEncoder.setFragmentTexture(diffuseTexture.texture, index: 0)

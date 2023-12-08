@@ -50,4 +50,21 @@ class Matrix
         )
         
     }
+    
+    static func ortographic(_ left: Float, _ right: Float, _ bottom: Float, _ top: Float, _ near: Float, _ far: Float) -> simd_float4x4
+    {
+        let r0c0: Float = 2.0 / (right - left)
+        let r1c1: Float = 2.0 / (top - bottom)
+        let r2c2: Float = 1.0 / (far - near)
+        
+        let r3c0: Float = -(right + left)/(right-left)
+        let r3c1: Float = -(top + bottom)/(top - bottom)
+        let r3c2: Float = -near/(far - near)
+        return simd_float4x4(
+            simd_float4(r0c0,0,0,0),
+            simd_float4(0,r1c1,0,0),
+            simd_float4(0,0,r2c2,0),
+            simd_float4(r3c0,r3c1,r3c2,1)
+        )
+    }
 }
