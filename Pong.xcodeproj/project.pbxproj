@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C62939D82B2EF81F00E4CE4D /* MathUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = C62939D72B2EF81F00E4CE4D /* MathUtil.swift */; };
 		C6446DFB2B0E75A100A5827B /* Matrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6446DFA2B0E75A100A5827B /* Matrix.swift */; };
 		C65608232AFABC83006279BD /* ConstantBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C65608222AFABC83006279BD /* ConstantBuffer.swift */; };
 		C658290A2AE70DD30072706C /* GeometryBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = C65829092AE70DD30072706C /* GeometryBuilder.swift */; };
@@ -25,6 +26,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C62939D72B2EF81F00E4CE4D /* MathUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MathUtil.swift; sourceTree = "<group>"; };
 		C6446DFA2B0E75A100A5827B /* Matrix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Matrix.swift; sourceTree = "<group>"; };
 		C65608222AFABC83006279BD /* ConstantBuffer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConstantBuffer.swift; sourceTree = "<group>"; };
 		C65829092AE70DD30072706C /* GeometryBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeometryBuilder.swift; sourceTree = "<group>"; };
@@ -59,6 +61,7 @@
 			isa = PBXGroup;
 			children = (
 				C6446DFA2B0E75A100A5827B /* Matrix.swift */,
+				C62939D72B2EF81F00E4CE4D /* MathUtil.swift */,
 			);
 			path = Math;
 			sourceTree = "<group>";
@@ -245,6 +248,7 @@
 				C658290A2AE70DD30072706C /* GeometryBuilder.swift in Sources */,
 				C6F550BD2ADBC52B005B8C47 /* UnlitRenderPipeline.swift in Sources */,
 				C6F550A32ADBBAFF005B8C47 /* PongApp.swift in Sources */,
+				C62939D82B2EF81F00E4CE4D /* MathUtil.swift in Sources */,
 				C6F550B42ADBBC4A005B8C47 /* Constants.swift in Sources */,
 				C658290C2AE70DE80072706C /* Geometry.swift in Sources */,
 				C6A2A3AC2AF2290E00A6FF16 /* Texture2D.swift in Sources */,
