@@ -10,6 +10,6 @@ import Foundation
 
 struct Constants
 {
-    static let gameWidth = 720
+    static let gameWidth = 1280
     static let gameHeight = 720
 }
