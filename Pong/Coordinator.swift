@@ -13,8 +13,11 @@ class Coordinator : NSObject, MTKViewDelegate {
     var initialized = false
     
     var device: MTLDevice? = nil
+    var depthState: MTLDepthStencilState? = nil
+    var depthTexture: MTLTexture? = nil
     
     var unlitPipeline : UnlitRenderPipeline? = nil
+    var unlitPipeline2 : UnlitRenderPipeline? = nil
     
     var geometryBuffer: GeometryBuffers? = nil
     var projectionViewBuffer: ConstantBuffer<simd_float4x4>? = nil
@@ -27,13 +30,29 @@ class Coordinator : NSObject, MTKViewDelegate {
         if !initialized {
             self.device = view.device!
             
+            // CONFIGURE DEPTH STATE
+            let depthDescriptor = MTLDepthStencilDescriptor()
+            depthDescriptor.depthCompareFunction = .lessEqual
+            depthDescriptor.isDepthWriteEnabled = true
+            depthState = device?.makeDepthStencilState(descriptor: depthDescriptor)
+            
+            // DEPTH TEXTURE
+            let depthTextureDescriptor = MTLTextureDescriptor()
+            depthTextureDescriptor.pixelFormat = .depth32Float
+            depthTextureDescriptor.width = Int(Constants.gameWidth)
+            depthTextureDescriptor.height = Int(Constants.gameHeight)
+            depthTextureDescriptor.usage = .renderTarget
+            depthTexture = device?.makeTexture(descriptor: depthTextureDescriptor)
+            
             unlitPipeline = UnlitRenderPipeline(device!)
+            unlitPipeline2 = UnlitRenderPipeline(device!)
             
             let geometry = GeometryBuilder().createCubeGeometry()
             geometryBuffer = GeometryBuffers(device!, geometry)
             
             let image = NSImage(named: "test_texture")
             unlitPipeline?.diffuseTexture = Texture2D(device!, image!)
+            unlitPipeline2?.diffuseTexture = Texture2D(device!, image!)
 
             projectionViewBuffer = ConstantBuffer<simd_float4x4>(device!)
             var projectionView = Matrix.ortographic(-2, 2, -2, 2, 0, 5)
@@ -60,12 +79,22 @@ class Coordinator : NSObject, MTKViewDelegate {
         colorAttachment0.storeAction = .store
         colorAttachment0.clearColor = MTLClearColorMake(0.8, 0.8,0.8, 1)
         
+        // CONFIGURE DEPTH
+        renderPassDescriptor.depthAttachment.clearDepth = 1.0
+        renderPassDescriptor.depthAttachment.texture = depthTexture
+        
         let renderPassEncoder = commandBuffer?.makeRenderCommandEncoder(descriptor: renderPassDescriptor)
+        
+        // SET DEPTH
+        renderPassEncoder?.setDepthStencilState(depthState)
         
         // DRAW HERE
         unlitPipeline?.transform = Matrix.translate(0,0,3) * Matrix.rotationX(angle)
         angle += 0.01
         unlitPipeline?.draw(renderPassEncoder!, geometryBuffer!, projectionViewBuffer!)
+        
+        unlitPipeline2?.transform = Matrix.translate(0.5,0.5,3) * Matrix.rotationX(angle)
+        unlitPipeline2?.draw(renderPassEncoder!, geometryBuffer!, projectionViewBuffer!)
 
         
         renderPassEncoder?.endEncoding()

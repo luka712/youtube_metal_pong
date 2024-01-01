@@ -18,6 +18,7 @@ struct ContentView: NSViewRepresentable
         view.device = MTLCreateSystemDefaultDevice()
         view.drawableSize = CGSize(width: Constants.gameWidth, height: Constants.gameHeight)
         view.preferredFramesPerSecond = 60
+        view.depthStencilPixelFormat = .depth32Float
         return view
     }
     
