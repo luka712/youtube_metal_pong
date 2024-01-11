@@ -36,17 +36,6 @@ class UnlitRenderPipeline
         }
     }
     
-    private var _transform = Matrix.identity()
-    private var transformBuffer: ConstantBuffer<simd_float4x4>
-    
-    var transform : simd_float4x4 {
-        get { return _transform}
-        set {
-            _transform = newValue
-            transformBuffer.write(data: &_transform)
-        }
-    }
-    
     init(_ device: MTLDevice)
     {
         let shaderLibrary = ShaderLib(device, "unlitMaterialVS", "unlitMaterialFS")
@@ -68,22 +57,22 @@ class UnlitRenderPipeline
         
         textureTillingBuffer = ConstantBuffer(device)
         diffuseColorBuffer = ConstantBuffer(device)
-        transformBuffer = ConstantBuffer(device)
         
         textureTilling = simd_float2(1,1)
         diffuseColor = simd_float4(1,1,1,1)
-        transform = Matrix.identity()
     }
     
     func draw(_ renderEncoder: MTLRenderCommandEncoder,
               _ buffers: GeometryBuffers,
-              _ perspectiveViewBuffer: ConstantBuffer<simd_float4x4>)
+              _ perspectiveViewBuffer: ConstantBuffer<simd_float4x4>,
+              _ transformsBuffer: ConstantBuffer<simd_float4x4>,
+              _ instanceCount: Int = 1)
     {
         renderEncoder.setRenderPipelineState(renderPipelineState!)
         renderEncoder.setVertexBuffer(buffers.positionsBuffer, offset: 0, index: 0)
         renderEncoder.setVertexBuffer(buffers.colorBuffer, offset: 0, index: 1)
         renderEncoder.setVertexBuffer(buffers.texCoordsBuffer, offset: 0, index: 2)
-        renderEncoder.setVertexBuffer(transformBuffer.buffer, offset: 0, index: 3)
+        renderEncoder.setVertexBuffer(transformsBuffer.buffer, offset: 0, index: 3)
         renderEncoder.setVertexBuffer(textureTillingBuffer.buffer, offset: 0, index: 4)
         renderEncoder.setVertexBuffer(perspectiveViewBuffer.buffer, offset: 0, index: 5)
         
@@ -98,7 +87,9 @@ class UnlitRenderPipeline
                 indexCount: buffers.indexCount,
                 indexType: .uint16,
                 indexBuffer: buffers.indexBuffer!,
-                indexBufferOffset: 0)
+                indexBufferOffset: 0,
+                instanceCount: instanceCount
+            )
         }
         else {
             renderEncoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: buffers.vertexCount)

@@ -12,13 +12,26 @@ class ConstantBuffer<T>
 {
     let buffer : MTLBuffer
     
-    init(_ device: MTLDevice)
+    init(_ device: MTLDevice, _ byteSize: Int? = nil)
     {
-        buffer = device.makeBuffer(length: MemoryLayout<T>.size)!
+        if byteSize != nil {
+            buffer = device.makeBuffer(length: byteSize!)!
+        }
+        else {
+            buffer = device.makeBuffer(length: MemoryLayout<T>.size)!
+        }
     }
     
-    func write(data: inout T)
+    func write(data: inout T, instance: Int = 0)
     {
-        buffer.contents().copyMemory(from: &data, byteCount: MemoryLayout<T>.size)
+        buffer.contents()
+            .advanced(by: MemoryLayout<T>.size * instance)
+            .copyMemory(from: &data, byteCount: MemoryLayout<T>.size)
+    }
+    
+    func writeArray(data: inout Array<T>)
+    {
+        buffer.contents()
+            .copyMemory(from: &data, byteCount: MemoryLayout<T>.size * data.count)
     }
 }

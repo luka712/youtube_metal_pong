@@ -16,18 +16,20 @@ vertex VSOutput unlitMaterialVS(
                                 const device packed_float2 *texCoords [[buffer(2)]],
                                 
                                 // constant buffer
-                                constant float4x4 &transform [[buffer(3)]],
+                                constant float4x4 *transform [[buffer(3)]],
                                 constant packed_float2 &textureTilling [[buffer(4)]],
                                 constant float4x4 &projectionView [[buffer(5)]],
                                 
                                 // builtins
-                                uint vid [[vertex_id]])
+                                uint vid [[vertex_id]],
+                                uint iid [[instance_id]]
+                                )
 {
 
     
     VSOutput out;
     float4 pos = float4(positions[vid], 1.0);
-    out.position = projectionView * transform * pos;
+    out.position = projectionView * transform[iid] * pos;
     out.color = colors[vid];
     out.texCoords = texCoords[vid] * textureTilling;
     return out;

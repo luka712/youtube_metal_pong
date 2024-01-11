@@ -83,7 +83,7 @@ class Matrix
     
     static func perspective(_ fov: Float = 90, _ aspectRatio: Float = 1, _ near: Float = 0.01, _ far: Float = 100) -> simd_float4x4
     {
-        let r = MathUtil.toRadians(fov)
+        let r = MathUtil.toRadians(fov) 
         let r0c0: Float = 1.0 / (tanf(r * 0.5)  * aspectRatio)
         let r1c1: Float = 1.0 / tanf(r * 0.5)
         
