@@ -23,10 +23,10 @@ class Coordinator : NSObject, MTKViewDelegate {
     
     // TRANSFORMS
     var transformsBuffer: ConstantBuffer<simd_float4x4>? = nil
-    var transforms : [simd_float4x4] = Array(repeating: simd_float4x4(), count: 100)
+    var transforms : [simd_float4x4] = Array(repeating: simd_float4x4(), count: 1)
     
     var angle : Float = 0
-    
+    var position: Float = 0
     
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
         
@@ -56,20 +56,17 @@ class Coordinator : NSObject, MTKViewDelegate {
             unlitPipeline?.diffuseTexture = Texture2D(device!, image!)
 
             projectionViewBuffer = ConstantBuffer<simd_float4x4>(device!)
-            var projectionView = Matrix.ortographic(-2, 2, -2, 2, 0, 5)
-            projectionView = Matrix.perspective(45, Float(Constants.gameWidth) / Float(Constants.gameHeight) , 0.01, 10)
+            var projection = Matrix.perspective(45, Float(Constants.gameWidth) / Float(Constants.gameHeight) , 0.01, 10)
+            var viewMatrix = Matrix.lookAt(simd_float3(0, position, 0), simd_float3(0,0,3), simd_float3(0,1,0))
+            var projectionView = projection * viewMatrix
             projectionViewBuffer?.write(data: &projectionView)
             
             // TRANSFORMS
             transformsBuffer = ConstantBuffer<simd_float4x4>(device!,
                                                              MemoryLayout<simd_float4x4>.size * transforms.count)
-            for i in 0..<100 {
-                transforms[i] = Matrix.translate(
-                    Float.random(in: -5..<5),
-                    Float.random(in: -5..<5),
-                    Float.random(in: 5..<10)
-                )
-            }
+        
+            transforms[0] = Matrix.translate( 0,0,3 )
+
             transformsBuffer?.writeArray(data: &transforms)
         }
     }
@@ -96,24 +93,21 @@ class Coordinator : NSObject, MTKViewDelegate {
         renderPassDescriptor.depthAttachment.clearDepth = 1.0
         renderPassDescriptor.depthAttachment.texture = depthTexture
         
+        // CAMERA
+        
+        position += 0.01
+        var projection = Matrix.perspective(45, Float(Constants.gameWidth) / Float(Constants.gameHeight) , 0.01, 10)
+        var viewMatrix = Matrix.lookAt(simd_float3(position, position, position), simd_float3(0,0,3), simd_float3(0,1,0))
+        var projectionView = projection * viewMatrix
+        projectionViewBuffer?.write(data: &projectionView)
+        
         let renderPassEncoder = commandBuffer?.makeRenderCommandEncoder(descriptor: renderPassDescriptor)
         
         // SET DEPTH
         renderPassEncoder?.setDepthStencilState(depthState)
         
         // DRAW HERE
-        for i in 0..<10 {
-            var matrix = Matrix.translate(
-                Float.random(in: -5..<5),
-                Float.random(in: -5..<5),
-                Float.random(in: 5..<10)
-            )
-            
-            transformsBuffer?.write(data: &matrix, instance: i)
-        }
-        
-        
-        unlitPipeline?.draw(renderPassEncoder!, geometryBuffer!, projectionViewBuffer!, transformsBuffer!, 100)
+        unlitPipeline?.draw(renderPassEncoder!, geometryBuffer!, projectionViewBuffer!, transformsBuffer!, 1)
         
         
         renderPassEncoder?.endEncoding()
@@ -121,6 +115,4 @@ class Coordinator : NSObject, MTKViewDelegate {
         commandBuffer?.commit()
         
     }
-    
-    
 }
