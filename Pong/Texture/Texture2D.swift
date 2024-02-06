@@ -10,25 +10,29 @@ import MetalKit
 
 class Texture2D
 {
-    let texture: MTLTexture
-    let samplerState: MTLSamplerState
+    public var texture: MTLTexture? = nil
+    public var samplerState: MTLSamplerState? = nil
     
-    init(_ device: MTLDevice, _ image: NSImage)
+    init(_ device: MTLDevice, _ image: NSImage? = nil, _ texture: MTLTexture? = nil)
     {
-        let textureLoader = MTKTextureLoader(device: device)
-        
-        let bitmap = image.cgImage(forProposedRect: nil, context: nil, hints: nil)!
-        
-        texture = try! textureLoader.newTexture(cgImage: bitmap, options: [
-            MTKTextureLoader.Option.origin: MTKTextureLoader.Origin.topLeft
-        ])
-        
-        let samplerDescriptor = MTLSamplerDescriptor()
-        samplerDescriptor.minFilter = .linear
-        samplerDescriptor.magFilter = .linear
-        samplerDescriptor.sAddressMode = .repeat
-        samplerDescriptor.tAddressMode = .repeat
-        samplerState = device.makeSamplerState(descriptor: samplerDescriptor)!
+        if(image != nil){
+            let textureLoader = MTKTextureLoader(device: device)
+            let bitmap = image!.cgImage(forProposedRect: nil, context: nil, hints: nil)!
+            
+            self.texture = try! textureLoader.newTexture(cgImage: bitmap, options: [
+                MTKTextureLoader.Option.origin: MTKTextureLoader.Origin.topLeft
+            ])
+            
+            let samplerDescriptor = MTLSamplerDescriptor()
+            samplerDescriptor.minFilter = .linear
+            samplerDescriptor.magFilter = .linear
+            samplerDescriptor.sAddressMode = .repeat
+            samplerDescriptor.tAddressMode = .repeat
+            samplerState = device.makeSamplerState(descriptor: samplerDescriptor)!
+        }
+        else if(texture != nil) {
+            self.texture = texture!
+        }
     }
     
     static func makeEmpty(_ device: MTLDevice) -> Texture2D {
@@ -42,7 +46,18 @@ class Texture2D
         })
         
         return Texture2D( device, image)
+    }
+    
+    static func createDepthTexture(_ device: MTLDevice) -> Texture2D
+    {
+        let depthTextureDescriptor = MTLTextureDescriptor()
+        depthTextureDescriptor.pixelFormat = .depth32Float
+        depthTextureDescriptor.width = Int(Constants.gameWidth)
+        depthTextureDescriptor.height = Int(Constants.gameHeight)
+        depthTextureDescriptor.usage = .renderTarget
+        let depthTexture = device.makeTexture(descriptor: depthTextureDescriptor)
         
+        return Texture2D(device, nil, depthTexture)
     }
 }
 

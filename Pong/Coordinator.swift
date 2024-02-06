@@ -14,19 +14,13 @@ class Coordinator : NSObject, MTKViewDelegate {
     
     var device: MTLDevice? = nil
     var depthState: MTLDepthStencilState? = nil
-    var depthTexture: MTLTexture? = nil
+    var depthTexture: Texture2D? = nil
+        
+    var camera: Camera? = nil
+    var paddle1: Paddle? = nil
+    var paddle2: Paddle? = nil
+    var ball: Ball? = nil
     
-    var unlitPipeline : UnlitRenderPipeline? = nil
-    
-    var geometryBuffer: GeometryBuffers? = nil
-    var projectionViewBuffer: ConstantBuffer<simd_float4x4>? = nil
-    
-    // TRANSFORMS
-    var transformsBuffer: ConstantBuffer<simd_float4x4>? = nil
-    var transforms : [simd_float4x4] = Array(repeating: simd_float4x4(), count: 1)
-    
-    var angle : Float = 0
-    var position: Float = 0
     
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
         
@@ -40,35 +34,28 @@ class Coordinator : NSObject, MTKViewDelegate {
             depthState = device?.makeDepthStencilState(descriptor: depthDescriptor)
             
             // DEPTH TEXTURE
-            let depthTextureDescriptor = MTLTextureDescriptor()
-            depthTextureDescriptor.pixelFormat = .depth32Float
-            depthTextureDescriptor.width = Int(Constants.gameWidth)
-            depthTextureDescriptor.height = Int(Constants.gameHeight)
-            depthTextureDescriptor.usage = .renderTarget
-            depthTexture = device?.makeTexture(descriptor: depthTextureDescriptor)
+            depthTexture = Texture2D.createDepthTexture(device!)
             
-            unlitPipeline = UnlitRenderPipeline(device!)
+            // INITIALIZE STATIC GEOMETRIES
+            GeometryBufferCollection.initialize(device!)
             
-            let geometry = GeometryBuilder().createCubeGeometry()
-            geometryBuffer = GeometryBuffers(device!, geometry)
-            
-            let image = NSImage(named: "test_texture")
-            unlitPipeline?.diffuseTexture = Texture2D(device!, image!)
-
-            projectionViewBuffer = ConstantBuffer<simd_float4x4>(device!)
-            var projection = Matrix.perspective(45, Float(Constants.gameWidth) / Float(Constants.gameHeight) , 0.01, 10)
-            var viewMatrix = Matrix.lookAt(simd_float3(0, position, 0), simd_float3(0,0,3), simd_float3(0,1,0))
-            var projectionView = projection * viewMatrix
-            projectionViewBuffer?.write(data: &projectionView)
-            
-            // TRANSFORMS
-            transformsBuffer = ConstantBuffer<simd_float4x4>(device!,
-                                                             MemoryLayout<simd_float4x4>.size * transforms.count)
-        
-            transforms[0] = Matrix.translate( 0,0,3 )
-
-            transformsBuffer?.writeArray(data: &transforms)
+            // GAME OBJECTS
+            camera = Camera(device!)
+            camera?.position = simd_float3(0,0, -20)
+            camera?.target = simd_float3(0,0,0)
+            paddle1 = Paddle(device!)
+            paddle1?.position.x = -10
+            paddle1?.color = simd_float4(0,0,1,1)
+            paddle2 = Paddle(device!)
+            paddle2?.position.x = 10
+            paddle2?.color = simd_float4(1,0,0,1)
+            ball = Ball(device!)
         }
+    }
+    
+    func update()
+    {
+        camera!.update()
     }
     
     func draw(in view: MTKView) {
@@ -76,6 +63,9 @@ class Coordinator : NSObject, MTKViewDelegate {
         if device == nil {
             return
         }
+        
+        // UPDATE
+        update()
         
         let queue = device!.makeCommandQueue()
         
@@ -91,24 +81,17 @@ class Coordinator : NSObject, MTKViewDelegate {
         
         // CONFIGURE DEPTH
         renderPassDescriptor.depthAttachment.clearDepth = 1.0
-        renderPassDescriptor.depthAttachment.texture = depthTexture
-        
-        // CAMERA
-        
-        position += 0.01
-        var projection = Matrix.perspective(45, Float(Constants.gameWidth) / Float(Constants.gameHeight) , 0.01, 10)
-        var viewMatrix = Matrix.lookAt(simd_float3(position, position, position), simd_float3(0,0,3), simd_float3(0,1,0))
-        var projectionView = projection * viewMatrix
-        projectionViewBuffer?.write(data: &projectionView)
-        
+        renderPassDescriptor.depthAttachment.texture = depthTexture!.texture!
+    
         let renderPassEncoder = commandBuffer?.makeRenderCommandEncoder(descriptor: renderPassDescriptor)
         
         // SET DEPTH
         renderPassEncoder?.setDepthStencilState(depthState)
         
         // DRAW HERE
-        unlitPipeline?.draw(renderPassEncoder!, geometryBuffer!, projectionViewBuffer!, transformsBuffer!, 1)
-        
+        paddle1?.draw(renderPassEncoder!, camera!)
+        paddle2?.draw(renderPassEncoder!, camera!)
+        ball?.draw(renderPassEncoder!, camera!)
         
         renderPassEncoder?.endEncoding()
         commandBuffer?.present(view.currentDrawable!)

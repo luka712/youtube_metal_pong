@@ -64,7 +64,7 @@ class UnlitRenderPipeline
     
     func draw(_ renderEncoder: MTLRenderCommandEncoder,
               _ buffers: GeometryBuffers,
-              _ perspectiveViewBuffer: ConstantBuffer<simd_float4x4>,
+              _ camera: Camera,
               _ transformsBuffer: ConstantBuffer<simd_float4x4>,
               _ instanceCount: Int = 1)
     {
@@ -74,7 +74,7 @@ class UnlitRenderPipeline
         renderEncoder.setVertexBuffer(buffers.texCoordsBuffer, offset: 0, index: 2)
         renderEncoder.setVertexBuffer(transformsBuffer.buffer, offset: 0, index: 3)
         renderEncoder.setVertexBuffer(textureTillingBuffer.buffer, offset: 0, index: 4)
-        renderEncoder.setVertexBuffer(perspectiveViewBuffer.buffer, offset: 0, index: 5)
+        renderEncoder.setVertexBuffer(camera.buffer.buffer, offset: 0, index: 5)
         
         renderEncoder.setFragmentBuffer(diffuseColorBuffer.buffer, offset: 0, index: 0)
         renderEncoder.setFragmentTexture(diffuseTexture.texture, index: 0)
