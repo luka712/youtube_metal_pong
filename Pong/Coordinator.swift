@@ -15,12 +15,17 @@ class Coordinator : NSObject, MTKViewDelegate {
     var device: MTLDevice? = nil
     var depthState: MTLDepthStencilState? = nil
     var depthTexture: Texture2D? = nil
+    
+    // LIGHTS
+    var ambientLight: AmbientLight? = nil
+    var directionalLight: DirectionalLight? = nil
+    
         
+    // GAME OBJECTS
     var camera: Camera? = nil
     var paddle1: Paddle? = nil
     var paddle2: Paddle? = nil
     var ball: Ball? = nil
-    
     
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
         
@@ -36,8 +41,15 @@ class Coordinator : NSObject, MTKViewDelegate {
             // DEPTH TEXTURE
             depthTexture = Texture2D.createDepthTexture(device!)
             
-            // INITIALIZE STATIC GEOMETRIES
-            GeometryBufferCollection.initialize(device!)
+            // INITIALIZE GEOMETRY BUFFERS
+            GeometryBuffersCollection.initialize(device!)
+            
+            // LIGHTS
+            ambientLight = AmbientLight(device!)
+            ambientLight?.intensity = 0.2
+            directionalLight = DirectionalLight(device!)
+            directionalLight?.direction = simd_float3(0,0,1)
+            directionalLight?.intensity = 0.8
             
             // GAME OBJECTS
             camera = Camera(device!)
@@ -55,7 +67,9 @@ class Coordinator : NSObject, MTKViewDelegate {
     
     func update()
     {
-        camera!.update()
+        camera?.update()
+        ambientLight?.update()
+        directionalLight?.update()
     }
     
     func draw(in view: MTKView) {
@@ -64,7 +78,6 @@ class Coordinator : NSObject, MTKViewDelegate {
             return
         }
         
-        // UPDATE
         update()
         
         let queue = device!.makeCommandQueue()
@@ -77,25 +90,28 @@ class Coordinator : NSObject, MTKViewDelegate {
         colorAttachment0.texture = view.currentDrawable?.texture
         colorAttachment0.loadAction = .clear
         colorAttachment0.storeAction = .store
-        colorAttachment0.clearColor = MTLClearColorMake(0.8, 0.8,0.8, 1)
+        colorAttachment0.clearColor = MTLClearColorMake(1, 0.7,0.8, 1)
         
         // CONFIGURE DEPTH
         renderPassDescriptor.depthAttachment.clearDepth = 1.0
-        renderPassDescriptor.depthAttachment.texture = depthTexture!.texture!
-    
+        renderPassDescriptor.depthAttachment.texture = depthTexture?.texture!
+
+
         let renderPassEncoder = commandBuffer?.makeRenderCommandEncoder(descriptor: renderPassDescriptor)
         
         // SET DEPTH
         renderPassEncoder?.setDepthStencilState(depthState)
         
         // DRAW HERE
-        paddle1?.draw(renderPassEncoder!, camera!)
-        paddle2?.draw(renderPassEncoder!, camera!)
-        ball?.draw(renderPassEncoder!, camera!)
+        paddle1?.draw(renderPassEncoder!, camera!, ambientLight!, directionalLight!)
+        paddle2?.draw(renderPassEncoder!, camera!, ambientLight!, directionalLight!)
+        ball?.draw(renderPassEncoder!, camera!, ambientLight!, directionalLight!)
         
         renderPassEncoder?.endEncoding()
         commandBuffer?.present(view.currentDrawable!)
         commandBuffer?.commit()
         
     }
+    
+    
 }

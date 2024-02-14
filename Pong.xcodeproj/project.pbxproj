@@ -15,6 +15,10 @@
 		C658290A2AE70DD30072706C /* GeometryBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = C65829092AE70DD30072706C /* GeometryBuilder.swift */; };
 		C658290C2AE70DE80072706C /* Geometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = C658290B2AE70DE80072706C /* Geometry.swift */; };
 		C658290F2AE70F790072706C /* GeometryBuffers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C658290E2AE70F790072706C /* GeometryBuffers.swift */; };
+		C66F14AD2B7A97B6005F9F1E /* RenderPipeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = C66F14AC2B7A97B5005F9F1E /* RenderPipeline.swift */; };
+		C66F14AF2B7A97CD005F9F1E /* MaterialShader.metal in Sources */ = {isa = PBXBuildFile; fileRef = C66F14AE2B7A97CD005F9F1E /* MaterialShader.metal */; };
+		C66F14B22B7A983A005F9F1E /* AmbientLight.swift in Sources */ = {isa = PBXBuildFile; fileRef = C66F14B12B7A983A005F9F1E /* AmbientLight.swift */; };
+		C66F14B52B7A9DD5005F9F1E /* DirectionalLight.swift in Sources */ = {isa = PBXBuildFile; fileRef = C66F14B42B7A9DD5005F9F1E /* DirectionalLight.swift */; };
 		C6A2A3AC2AF2290E00A6FF16 /* Texture2D.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6A2A3AB2AF2290E00A6FF16 /* Texture2D.swift */; };
 		C6DE91792B6C26FF000627EF /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6DE91782B6C26FF000627EF /* Camera.swift */; };
 		C6E343AD2B34AF98009F0B74 /* MathUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6E343AC2B34AF98009F0B74 /* MathUtil.swift */; };
@@ -38,6 +42,10 @@
 		C65829092AE70DD30072706C /* GeometryBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeometryBuilder.swift; sourceTree = "<group>"; };
 		C658290B2AE70DE80072706C /* Geometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Geometry.swift; sourceTree = "<group>"; };
 		C658290E2AE70F790072706C /* GeometryBuffers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeometryBuffers.swift; sourceTree = "<group>"; };
+		C66F14AC2B7A97B5005F9F1E /* RenderPipeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderPipeline.swift; sourceTree = "<group>"; };
+		C66F14AE2B7A97CD005F9F1E /* MaterialShader.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = MaterialShader.metal; sourceTree = "<group>"; };
+		C66F14B12B7A983A005F9F1E /* AmbientLight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmbientLight.swift; sourceTree = "<group>"; };
+		C66F14B42B7A9DD5005F9F1E /* DirectionalLight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionalLight.swift; sourceTree = "<group>"; };
 		C6A2A3AB2AF2290E00A6FF16 /* Texture2D.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Texture2D.swift; sourceTree = "<group>"; };
 		C6DE91782B6C26FF000627EF /* Camera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Camera.swift; sourceTree = "<group>"; };
 		C6E343AC2B34AF98009F0B74 /* MathUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MathUtil.swift; sourceTree = "<group>"; };
@@ -109,6 +117,15 @@
 			path = AttributeBuffers;
 			sourceTree = "<group>";
 		};
+		C66F14B02B7A982B005F9F1E /* Lights */ = {
+			isa = PBXGroup;
+			children = (
+				C66F14B12B7A983A005F9F1E /* AmbientLight.swift */,
+				C66F14B42B7A9DD5005F9F1E /* DirectionalLight.swift */,
+			);
+			path = Lights;
+			sourceTree = "<group>";
+		};
 		C6A2A3A82AF227D200A6FF16 /* Texture */ = {
 			isa = PBXGroup;
 			children = (
@@ -136,6 +153,7 @@
 		C6F550A12ADBBAFF005B8C47 /* Pong */ = {
 			isa = PBXGroup;
 			children = (
+				C66F14B02B7A982B005F9F1E /* Lights */,
 				C64D62272B7290B300598847 /* GameObjects */,
 				C6446DF92B0E759600A5827B /* Math */,
 				C65608212AFABC75006279BD /* ConstantBuffers */,
@@ -176,6 +194,7 @@
 			isa = PBXGroup;
 			children = (
 				C6F550BC2ADBC52B005B8C47 /* UnlitRenderPipeline.swift */,
+				C66F14AC2B7A97B5005F9F1E /* RenderPipeline.swift */,
 			);
 			path = RenderPipelines;
 			sourceTree = "<group>";
@@ -185,6 +204,7 @@
 			children = (
 				C6F550BF2ADBC575005B8C47 /* UnlitMaterialShader.metal */,
 				C6F550C12ADBC687005B8C47 /* ShaderLib.swift */,
+				C66F14AE2B7A97CD005F9F1E /* MaterialShader.metal */,
 			);
 			path = Shaders;
 			sourceTree = "<group>";
@@ -262,6 +282,7 @@
 				C6F550C22ADBC687005B8C47 /* ShaderLib.swift in Sources */,
 				C64D62292B7290C000598847 /* Paddle.swift in Sources */,
 				C6F550A52ADBBAFF005B8C47 /* ContentView.swift in Sources */,
+				C66F14AD2B7A97B6005F9F1E /* RenderPipeline.swift in Sources */,
 				C6F550B22ADBBB57005B8C47 /* Coordinator.swift in Sources */,
 				C6446DFB2B0E75A100A5827B /* Matrix.swift in Sources */,
 				C65608232AFABC83006279BD /* ConstantBuffer.swift in Sources */,
@@ -271,8 +292,11 @@
 				C6F550BD2ADBC52B005B8C47 /* UnlitRenderPipeline.swift in Sources */,
 				C6F550A32ADBBAFF005B8C47 /* PongApp.swift in Sources */,
 				C6E343AD2B34AF98009F0B74 /* MathUtil.swift in Sources */,
+				C66F14B52B7A9DD5005F9F1E /* DirectionalLight.swift in Sources */,
+				C66F14B22B7A983A005F9F1E /* AmbientLight.swift in Sources */,
 				C6F550B42ADBBC4A005B8C47 /* Constants.swift in Sources */,
 				C6DE91792B6C26FF000627EF /* Camera.swift in Sources */,
+				C66F14AF2B7A97CD005F9F1E /* MaterialShader.metal in Sources */,
 				C64D622B2B7291F000598847 /* GeometryBufferCollection.swift in Sources */,
 				C658290C2AE70DE80072706C /* Geometry.swift in Sources */,
 				C6A2A3AC2AF2290E00A6FF16 /* Texture2D.swift in Sources */,

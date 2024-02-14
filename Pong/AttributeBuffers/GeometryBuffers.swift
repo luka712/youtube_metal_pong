@@ -12,8 +12,9 @@ class GeometryBuffers
 {
     let positionsBuffer: MTLBuffer
     var indexBuffer: MTLBuffer? = nil
-    var colorBuffer: MTLBuffer
+    let colorBuffer: MTLBuffer
     let texCoordsBuffer: MTLBuffer
+    let normalBuffer: MTLBuffer
     
     let vertexCount: Int
     var indexCount: Int = 0
@@ -38,6 +39,11 @@ class GeometryBuffers
             length: geometry.texCoords.count * MemoryLayout<Float>.size
         )!
         
+        normalBuffer = device.makeBuffer(
+            bytes: geometry.normals,
+            length: geometry.normals.count * MemoryLayout<Float>.size
+        )!
+        
         // Index buffer
         if !geometry.indices.isEmpty {
             
@@ -50,5 +56,4 @@ class GeometryBuffers
             usesIndices = true
         }
     }
-   
 }
