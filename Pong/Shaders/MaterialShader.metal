@@ -8,6 +8,7 @@ struct VSOutput
     float4 color;
     float2 texCoords;
     float3 normal;
+    float3 fragPos;
 };
 
 vertex VSOutput materialVS(
@@ -19,8 +20,9 @@ vertex VSOutput materialVS(
                             
                                 // constant buffer
                                 constant float4x4 *transform [[buffer(4)]],
-                                constant packed_float2 &textureTilling [[buffer(5)]],
-                                constant float4x4 &projectionView [[buffer(6)]],
+                                constant float4x4 *normalMatrix [[buffer(5)]],
+                                constant packed_float2 &textureTilling [[buffer(6)]],
+                                constant float4x4 &projectionView [[buffer(7)]],
                                 
                                 // builtins
                                 uint vid [[vertex_id]],
@@ -34,7 +36,8 @@ vertex VSOutput materialVS(
     out.position = projectionView * transform[iid] * pos;
     out.color = colors[vid];
     out.texCoords = texCoords[vid] * textureTilling;
-    out.normal = normals[vid];
+    out.normal =  (normalMatrix[iid] * float4(normals[vid], 1.0)).xyz;
+    out.fragPos = (transform[iid] * pos).xyz;
     return out;
 }
 
@@ -51,6 +54,15 @@ struct DirectionalLight
     packed_float3 direction;
 };
 
+struct PointLight
+{
+    packed_float3 color;
+    float intensity;
+    packed_float3 position;
+    float _;
+};
+
+
 fragment float4 materialFS(VSOutput in [[stage_in]],
                                 
                                 // constant buffers
@@ -59,6 +71,7 @@ fragment float4 materialFS(VSOutput in [[stage_in]],
                                 // lights
                                 constant AmbientLight& ambient [[buffer(1)]],
                                 constant DirectionalLight& directional [[buffer(2)]],
+                                constant PointLight* pointLights [[buffer(3)]],
                                 
                                 texture2d<float> diffuseTexture [[texture(0)]],
                                 sampler texSampler [[sampler(0)]]
@@ -73,6 +86,15 @@ fragment float4 materialFS(VSOutput in [[stage_in]],
     float3 directionalAmount = dot(normalize(in.normal), normalize(-directional.direction));
     directionalAmount = clamp(0, 1, directionalAmount);
     lightAmount += directionalAmount;
+    
+    // POINT LIGHTS
+    for(int i = 0; i < 3; i++)
+    {
+        float3 direction = normalize(pointLights[i].position - in.fragPos);
+        float3 pointAmount = dot(normalize(in.normal), direction);
+        pointAmount = clamp(0, 1, pointAmount);
+        lightAmount += pointAmount  * pointLights[i].color * pointLights[i].intensity;
+    }
     
     color.rgb *= lightAmount;
     

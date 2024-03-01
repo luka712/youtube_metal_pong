@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C616AC622B8D051A0059AD7F /* PointLight.swift in Sources */ = {isa = PBXBuildFile; fileRef = C616AC612B8D051A0059AD7F /* PointLight.swift */; };
+		C616AC662B8D12560059AD7F /* Floor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C616AC652B8D12560059AD7F /* Floor.swift */; };
 		C6446DFB2B0E75A100A5827B /* Matrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6446DFA2B0E75A100A5827B /* Matrix.swift */; };
 		C64D62292B7290C000598847 /* Paddle.swift in Sources */ = {isa = PBXBuildFile; fileRef = C64D62282B7290C000598847 /* Paddle.swift */; };
 		C64D622B2B7291F000598847 /* GeometryBufferCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = C64D622A2B7291F000598847 /* GeometryBufferCollection.swift */; };
@@ -34,6 +36,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C616AC612B8D051A0059AD7F /* PointLight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointLight.swift; sourceTree = "<group>"; };
+		C616AC652B8D12560059AD7F /* Floor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Floor.swift; sourceTree = "<group>"; };
 		C6446DFA2B0E75A100A5827B /* Matrix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Matrix.swift; sourceTree = "<group>"; };
 		C64D62282B7290C000598847 /* Paddle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Paddle.swift; sourceTree = "<group>"; };
 		C64D622A2B7291F000598847 /* GeometryBufferCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeometryBufferCollection.swift; sourceTree = "<group>"; };
@@ -87,6 +91,7 @@
 			children = (
 				C64D62282B7290C000598847 /* Paddle.swift */,
 				C64D622C2B7294C600598847 /* Ball.swift */,
+				C616AC652B8D12560059AD7F /* Floor.swift */,
 			);
 			path = GameObjects;
 			sourceTree = "<group>";
@@ -122,6 +127,7 @@
 			children = (
 				C66F14B12B7A983A005F9F1E /* AmbientLight.swift */,
 				C66F14B42B7A9DD5005F9F1E /* DirectionalLight.swift */,
+				C616AC612B8D051A0059AD7F /* PointLight.swift */,
 			);
 			path = Lights;
 			sourceTree = "<group>";
@@ -297,8 +303,10 @@
 				C6F550B42ADBBC4A005B8C47 /* Constants.swift in Sources */,
 				C6DE91792B6C26FF000627EF /* Camera.swift in Sources */,
 				C66F14AF2B7A97CD005F9F1E /* MaterialShader.metal in Sources */,
+				C616AC622B8D051A0059AD7F /* PointLight.swift in Sources */,
 				C64D622B2B7291F000598847 /* GeometryBufferCollection.swift in Sources */,
 				C658290C2AE70DE80072706C /* Geometry.swift in Sources */,
+				C616AC662B8D12560059AD7F /* Floor.swift in Sources */,
 				C6A2A3AC2AF2290E00A6FF16 /* Texture2D.swift in Sources */,
 				C6F550C02ADBC575005B8C47 /* UnlitMaterialShader.metal in Sources */,
 			);
@@ -357,7 +365,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 13.2;
+				MACOSX_DEPLOYMENT_TARGET = 14.2;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -411,7 +419,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 13.2;
+				MACOSX_DEPLOYMENT_TARGET = 14.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;

@@ -19,6 +19,7 @@ class Coordinator : NSObject, MTKViewDelegate {
     // LIGHTS
     var ambientLight: AmbientLight? = nil
     var directionalLight: DirectionalLight? = nil
+    var pointLights: PointLightsCollection? = nil
     
         
     // GAME OBJECTS
@@ -26,6 +27,7 @@ class Coordinator : NSObject, MTKViewDelegate {
     var paddle1: Paddle? = nil
     var paddle2: Paddle? = nil
     var ball: Ball? = nil
+    var floor: Floor? = nil
     
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
         
@@ -48,8 +50,15 @@ class Coordinator : NSObject, MTKViewDelegate {
             ambientLight = AmbientLight(device!)
             ambientLight?.intensity = 0.2
             directionalLight = DirectionalLight(device!)
-            directionalLight?.direction = simd_float3(0,0,1)
+            directionalLight?.direction = simd_float3(-1,0,0)
             directionalLight?.intensity = 0.8
+            pointLights = PointLightsCollection(device!)
+            pointLights?.lights[0].position = simd_float3(7,3, -1)
+            pointLights?.lights[0].color = simd_float3(1,1,0)
+            pointLights?.lights[1].position = simd_float3(-7,6, -1)
+            pointLights?.lights[1].color = simd_float3(1,0,1)
+            pointLights?.lights[2].position = simd_float3(0,3, -1)
+            pointLights?.lights[2].color = simd_float3(0, 1,1)
             
             // GAME OBJECTS
             camera = Camera(device!)
@@ -57,11 +66,12 @@ class Coordinator : NSObject, MTKViewDelegate {
             camera?.target = simd_float3(0,0,0)
             paddle1 = Paddle(device!)
             paddle1?.position.x = -10
-            paddle1?.color = simd_float4(0,0,1,1)
+            paddle1?.color = simd_float4(0.3,0.3,1,1)
             paddle2 = Paddle(device!)
             paddle2?.position.x = 10
-            paddle2?.color = simd_float4(1,0,0,1)
+            paddle2?.color = simd_float4(1,0.3,0.3,1)
             ball = Ball(device!)
+            floor = Floor(device!)
         }
     }
     
@@ -70,6 +80,7 @@ class Coordinator : NSObject, MTKViewDelegate {
         camera?.update()
         ambientLight?.update()
         directionalLight?.update()
+        pointLights?.update()
     }
     
     func draw(in view: MTKView) {
@@ -103,9 +114,10 @@ class Coordinator : NSObject, MTKViewDelegate {
         renderPassEncoder?.setDepthStencilState(depthState)
         
         // DRAW HERE
-        paddle1?.draw(renderPassEncoder!, camera!, ambientLight!, directionalLight!)
-        paddle2?.draw(renderPassEncoder!, camera!, ambientLight!, directionalLight!)
-        ball?.draw(renderPassEncoder!, camera!, ambientLight!, directionalLight!)
+        paddle1?.draw(renderPassEncoder!, camera!, ambientLight!, directionalLight!, pointLights!)
+        paddle2?.draw(renderPassEncoder!, camera!, ambientLight!, directionalLight!, pointLights!)
+        ball?.draw(renderPassEncoder!, camera!, ambientLight!, directionalLight!, pointLights!)
+        floor?.draw(renderPassEncoder!, camera!, ambientLight!, directionalLight!, pointLights!)
         
         renderPassEncoder?.endEncoding()
         commandBuffer?.present(view.currentDrawable!)

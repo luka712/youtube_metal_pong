@@ -66,8 +66,10 @@ class RenderPipeline
               _ buffers: GeometryBuffers,
               _ camera: Camera,
               _ transformsBuffer: ConstantBuffer<simd_float4x4>,
+              _ normalMatrixBuffer: ConstantBuffer<simd_float4x4>,
               _ ambientLight: AmbientLight,
               _ directionalLight: DirectionalLight,
+              _ pointLights: PointLightsCollection,
               _ instanceCount: Int = 1)
     {
         renderEncoder.setRenderPipelineState(renderPipelineState!)
@@ -77,12 +79,14 @@ class RenderPipeline
         renderEncoder.setVertexBuffer(buffers.normalBuffer, offset: 0, index: 3)
         
         renderEncoder.setVertexBuffer(transformsBuffer.buffer, offset: 0, index: 4)
-        renderEncoder.setVertexBuffer(textureTillingBuffer.buffer, offset: 0, index: 5)
-        renderEncoder.setVertexBuffer(camera.buffer.buffer, offset: 0, index: 6)
+        renderEncoder.setVertexBuffer(normalMatrixBuffer.buffer, offset: 0, index: 5)
+        renderEncoder.setVertexBuffer(textureTillingBuffer.buffer, offset: 0, index: 6)
+        renderEncoder.setVertexBuffer(camera.buffer.buffer, offset: 0, index: 7)
         
         renderEncoder.setFragmentBuffer(diffuseColorBuffer.buffer, offset: 0, index: 0)
         renderEncoder.setFragmentBuffer(ambientLight.buffer.buffer, offset: 0, index: 1)
         renderEncoder.setFragmentBuffer(directionalLight.buffer.buffer, offset: 0, index: 2)
+        renderEncoder.setFragmentBuffer(pointLights.buffer.buffer, offset: 0, index: 3)
         renderEncoder.setFragmentTexture(diffuseTexture.texture, index: 0)
         renderEncoder.setFragmentSamplerState(diffuseTexture.samplerState, index: 0)
       

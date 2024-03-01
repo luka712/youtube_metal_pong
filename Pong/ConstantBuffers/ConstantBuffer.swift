@@ -12,7 +12,7 @@ class ConstantBuffer<T>
 {
     let buffer : MTLBuffer
     
-    init(_ device: MTLDevice, _ byteSize: Int? = nil)
+    init(_ device: MTLDevice, _ byteSize: Int? = nil, _ label: String? = nil)
     {
         if byteSize != nil {
             buffer = device.makeBuffer(length: byteSize!)!
@@ -20,6 +20,8 @@ class ConstantBuffer<T>
         else {
             buffer = device.makeBuffer(length: MemoryLayout<T>.size)!
         }
+        
+        buffer.label = label
     }
     
     func write(data: inout T, instance: Int = 0)
