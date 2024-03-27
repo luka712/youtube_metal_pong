@@ -12,6 +12,8 @@ class Coordinator : NSObject, MTKViewDelegate {
     
     var initialized = false
     
+    let inputManager = InputManager()
+    
     var device: MTLDevice? = nil
     var depthState: MTLDepthStencilState? = nil
     var depthTexture: Texture2D? = nil
@@ -50,7 +52,7 @@ class Coordinator : NSObject, MTKViewDelegate {
             ambientLight = AmbientLight(device!)
             ambientLight?.intensity = 0.2
             directionalLight = DirectionalLight(device!)
-            directionalLight?.direction = simd_float3(-1,0,0)
+            directionalLight?.direction = simd_float3(0,0,1)
             directionalLight?.intensity = 0.8
             pointLights = PointLightsCollection(device!)
             pointLights?.lights[0].position = simd_float3(7,3, -1)
@@ -59,18 +61,21 @@ class Coordinator : NSObject, MTKViewDelegate {
             pointLights?.lights[1].color = simd_float3(1,0,1)
             pointLights?.lights[2].position = simd_float3(0,3, -1)
             pointLights?.lights[2].color = simd_float3(0, 1,1)
-            
+                        
             // GAME OBJECTS
             camera = Camera(device!)
             camera?.position = simd_float3(0,0, -20)
             camera?.target = simd_float3(0,0,0)
-            paddle1 = Paddle(device!)
+            paddle1 = Paddle(device!, inputManager)
+            paddle1?.playerOne = true
             paddle1?.position.x = -10
             paddle1?.color = simd_float4(0.3,0.3,1,1)
-            paddle2 = Paddle(device!)
+            paddle2 = Paddle(device!, inputManager)
+            paddle2?.playerOne = false
             paddle2?.position.x = 10
             paddle2?.color = simd_float4(1,0.3,0.3,1)
             ball = Ball(device!)
+
             floor = Floor(device!)
         }
     }
@@ -81,6 +86,8 @@ class Coordinator : NSObject, MTKViewDelegate {
         ambientLight?.update()
         directionalLight?.update()
         pointLights?.update()
+        paddle1?.update()
+        paddle2?.update()
     }
     
     func draw(in view: MTKView) {

@@ -12,6 +12,7 @@ import MetalKit
 class Camera
 {
     public var buffer: ConstantBuffer<simd_float4x4>
+    public var eyeBuffer: ConstantBuffer<simd_float3>
     
     // Matrices
     private var projection: simd_float4x4
@@ -32,6 +33,7 @@ class Camera
     init(_ device: MTLDevice)
     {
         buffer = ConstantBuffer<simd_float4x4>(device)
+        eyeBuffer = ConstantBuffer<simd_float3>(device)
         projection = Matrix.perspective(fov, Float(Constants.gameWidth) / Float(Constants.gameHeight) , near, far)
         view = Matrix.lookAt(position, target, up)
         projectionView = projection * view
@@ -43,5 +45,6 @@ class Camera
         view = Matrix.lookAt(position, target, up)
         projectionView = projection * view
         buffer.write(data: &projectionView)
+        eyeBuffer.write(data: &position)
     }
 }

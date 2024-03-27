@@ -36,6 +36,18 @@ class RenderPipeline
         }
     }
     
+    
+    private var _shininess: Float = 16.0
+    private var shininessBuffer: ConstantBuffer<Float>
+    
+    var shininess: Float {
+        get { return _shininess}
+        set {
+            _shininess = newValue
+            shininessBuffer.write(data: &_shininess)
+        }
+    }
+    
     init(_ device: MTLDevice)
     {
         let shaderLibrary = ShaderLib(device, "materialVS", "materialFS")
@@ -57,9 +69,11 @@ class RenderPipeline
         
         textureTillingBuffer = ConstantBuffer(device)
         diffuseColorBuffer = ConstantBuffer(device)
+        shininessBuffer = ConstantBuffer(device);
         
         textureTilling = simd_float2(1,1)
         diffuseColor = simd_float4(1,1,1,1)
+        shininess = 16.0
     }
     
     func draw(_ renderEncoder: MTLRenderCommandEncoder,
@@ -82,11 +96,13 @@ class RenderPipeline
         renderEncoder.setVertexBuffer(normalMatrixBuffer.buffer, offset: 0, index: 5)
         renderEncoder.setVertexBuffer(textureTillingBuffer.buffer, offset: 0, index: 6)
         renderEncoder.setVertexBuffer(camera.buffer.buffer, offset: 0, index: 7)
+        renderEncoder.setVertexBuffer(camera.eyeBuffer.buffer, offset: 0, index: 8)
         
         renderEncoder.setFragmentBuffer(diffuseColorBuffer.buffer, offset: 0, index: 0)
-        renderEncoder.setFragmentBuffer(ambientLight.buffer.buffer, offset: 0, index: 1)
-        renderEncoder.setFragmentBuffer(directionalLight.buffer.buffer, offset: 0, index: 2)
-        renderEncoder.setFragmentBuffer(pointLights.buffer.buffer, offset: 0, index: 3)
+        renderEncoder.setFragmentBuffer(shininessBuffer.buffer, offset: 0, index: 1)
+        renderEncoder.setFragmentBuffer(ambientLight.buffer.buffer, offset: 0, index: 2)
+        renderEncoder.setFragmentBuffer(directionalLight.buffer.buffer, offset: 0, index: 3)
+        renderEncoder.setFragmentBuffer(pointLights.buffer.buffer, offset: 0, index: 4)
         renderEncoder.setFragmentTexture(diffuseTexture.texture, index: 0)
         renderEncoder.setFragmentSamplerState(diffuseTexture.samplerState, index: 0)
       

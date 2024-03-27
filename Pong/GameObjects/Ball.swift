@@ -13,13 +13,14 @@ class Ball
     public var position = simd_float3(0,0,0)
     public var color = simd_float4(1,1,1,1)
     
-    private let scale = simd_float3(1,1,1)
+    public var scale = simd_float3(1,1,1)
     
     private var transform: simd_float4x4
-    private let pipeline: RenderPipeline
+    public let pipeline: RenderPipeline
     private let transformBuffer: ConstantBuffer<simd_float4x4>
     private let normalMatrixBuffer: ConstantBuffer<simd_float4x4>
 
+    private var angle: Float = 0
     
     init(_ device: MTLDevice)
     {
@@ -34,8 +35,10 @@ class Ball
                      _ directionalLight: DirectionalLight,
                      _ pointLights: PointLightsCollection)
     {
-        transform = Matrix.scale(scale.x, scale.y, scale.z)
-        transform *= Matrix.translate(position.x, position.y, position.z)
+        angle += 0.01
+        transform = Matrix.translate(position.x, position.y, position.z)
+        transform *= Matrix.scale(scale.x, scale.y, scale.z)
+
         
         transformBuffer.write(data: &transform)
         

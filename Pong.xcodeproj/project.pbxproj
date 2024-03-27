@@ -21,6 +21,7 @@
 		C66F14AF2B7A97CD005F9F1E /* MaterialShader.metal in Sources */ = {isa = PBXBuildFile; fileRef = C66F14AE2B7A97CD005F9F1E /* MaterialShader.metal */; };
 		C66F14B22B7A983A005F9F1E /* AmbientLight.swift in Sources */ = {isa = PBXBuildFile; fileRef = C66F14B12B7A983A005F9F1E /* AmbientLight.swift */; };
 		C66F14B52B7A9DD5005F9F1E /* DirectionalLight.swift in Sources */ = {isa = PBXBuildFile; fileRef = C66F14B42B7A9DD5005F9F1E /* DirectionalLight.swift */; };
+		C692827D2B9F9097003E279A /* InputManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C692827C2B9F9097003E279A /* InputManager.swift */; };
 		C6A2A3AC2AF2290E00A6FF16 /* Texture2D.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6A2A3AB2AF2290E00A6FF16 /* Texture2D.swift */; };
 		C6DE91792B6C26FF000627EF /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6DE91782B6C26FF000627EF /* Camera.swift */; };
 		C6E343AD2B34AF98009F0B74 /* MathUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6E343AC2B34AF98009F0B74 /* MathUtil.swift */; };
@@ -50,6 +51,7 @@
 		C66F14AE2B7A97CD005F9F1E /* MaterialShader.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = MaterialShader.metal; sourceTree = "<group>"; };
 		C66F14B12B7A983A005F9F1E /* AmbientLight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmbientLight.swift; sourceTree = "<group>"; };
 		C66F14B42B7A9DD5005F9F1E /* DirectionalLight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionalLight.swift; sourceTree = "<group>"; };
+		C692827C2B9F9097003E279A /* InputManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputManager.swift; sourceTree = "<group>"; };
 		C6A2A3AB2AF2290E00A6FF16 /* Texture2D.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Texture2D.swift; sourceTree = "<group>"; };
 		C6DE91782B6C26FF000627EF /* Camera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Camera.swift; sourceTree = "<group>"; };
 		C6E343AC2B34AF98009F0B74 /* MathUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MathUtil.swift; sourceTree = "<group>"; };
@@ -132,6 +134,14 @@
 			path = Lights;
 			sourceTree = "<group>";
 		};
+		C692827B2B9F9087003E279A /* Input */ = {
+			isa = PBXGroup;
+			children = (
+				C692827C2B9F9097003E279A /* InputManager.swift */,
+			);
+			path = Input;
+			sourceTree = "<group>";
+		};
 		C6A2A3A82AF227D200A6FF16 /* Texture */ = {
 			isa = PBXGroup;
 			children = (
@@ -159,6 +169,7 @@
 		C6F550A12ADBBAFF005B8C47 /* Pong */ = {
 			isa = PBXGroup;
 			children = (
+				C692827B2B9F9087003E279A /* Input */,
 				C66F14B02B7A982B005F9F1E /* Lights */,
 				C64D62272B7290B300598847 /* GameObjects */,
 				C6446DF92B0E759600A5827B /* Math */,
@@ -285,6 +296,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C692827D2B9F9097003E279A /* InputManager.swift in Sources */,
 				C6F550C22ADBC687005B8C47 /* ShaderLib.swift in Sources */,
 				C64D62292B7290C000598847 /* Paddle.swift in Sources */,
 				C6F550A52ADBBAFF005B8C47 /* ContentView.swift in Sources */,
@@ -445,6 +457,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 14.2;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = lerkapic.Pong;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -470,6 +483,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 14.2;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = lerkapic.Pong;
 				PRODUCT_NAME = "$(TARGET_NAME)";
